@@ -40,6 +40,31 @@ def plot_4d_sphere_from_zeta(complex_numbers):
 
     plt.show()
     
+def plot_4d_sphere_multiple_projections(complex_numbers):
+    data = np.array([zeta_to_4d_sphere(s) for s in complex_numbers])
+
+    fig, axs = plt.subplots(1, 3, figsize=(18, 6))
+
+    # Prepare a colormap and a normalization function for color mapping
+    cmap = cm.get_cmap("viridis")
+    norm = plt.Normalize(-1, 1)
+
+    for i, (x_idx, y_idx) in enumerate([(0, 1), (0, 2), (1, 2)]):
+        for point in data:
+            x, y = point[x_idx], point[y_idx]
+            w = point[3]
+
+            color = cmap(norm(w))
+            size = 10 + 40 * ((w + 1) / 2)
+
+            axs[i].scatter(x, y, c=color, marker="o", s=size, alpha=0.7)
+
+        axs[i].set_xlabel(f"Axis {x_idx}")
+        axs[i].set_ylabel(f"Axis {y_idx}")
+
+    plt.show()
+    
+    
 # Example usage:
 s = 2  # You can use any complex number as input
 point_on_4d_sphere = zeta_to_4d_sphere(s)
@@ -50,3 +75,6 @@ complex_numbers = [complex(i, j) for i in np.linspace(0, 10, 100) for j in np.li
 
 # Plot the 4D hypersphere generated using zeta_to_4d_sphere
 plot_4d_sphere_from_zeta(complex_numbers)
+
+# Plot the 2D projections
+plot_4d_sphere_multiple_projections(complex_numbers)
